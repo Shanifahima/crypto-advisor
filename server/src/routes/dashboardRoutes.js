@@ -3,6 +3,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { authMiddleware } from "../middleware/auth.js";
 import Feedback from "../models/Feedback.js";
+import { getRandomMeme } from "../utils/memes.js";
 import { generateAiInsight } from "../utils/aiInsight.js";
 import { newsFallback } from "../utils/newsFallback.js";
 
@@ -63,6 +64,8 @@ router.get("/", authMiddleware, async (req, res) => {
 
     // 3. AI Insight of the Day
     const aiInsight = generateAiInsight(prefs);
+
+    const meme = getRandomMeme();
 
     res.json({
       marketNews: news,
