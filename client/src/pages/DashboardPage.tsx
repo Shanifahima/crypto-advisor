@@ -1,8 +1,10 @@
+// client/src/pages/DashboardPage.tsx
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import DashboardSection from "../components/DashboardSection";
 import { DashboardData } from "../types";
 import { getDashboard, sendFeedback } from "../api/dashboard";
+import { getMemeById } from "../utils/memes";
 
 const DashboardPage: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -62,6 +64,12 @@ const DashboardPage: React.FC = () => {
   }
 
   const { marketNews, coinPrices, aiInsight, meme } = data;
+
+  // 👇 כאן אנחנו מתעלמים מה-URL שהשרת מחזיר
+  // ומשתמשים במיפוי המקומי לפי ה-id
+  const localMeme = getMemeById(meme.id);
+  const memeImageUrl = localMeme?.url ?? "/memes/meme1.jpg";
+  const memeCaption = meme.caption || localMeme?.caption || "";
 
   return (
     <Layout>
@@ -160,11 +168,11 @@ const DashboardPage: React.FC = () => {
         >
           <div className="flex flex-col gap-2 items-center">
             <img
-              src={meme.url}
-              alt={meme.caption}
+              src={memeImageUrl}
+              alt={memeCaption || "Crypto meme"}
               className="rounded-lg max-h-64 object-contain border border-slate-800"
             />
-            <p className="text-xs text-slate-300">{meme.caption}</p>
+            <p className="text-xs text-slate-300">{memeCaption}</p>
           </div>
         </DashboardSection>
       </div>
